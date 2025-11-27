@@ -633,27 +633,16 @@ const App = () => {
                Rate My Build with AI
              </button>
 
-             <div className="grid grid-cols-2 gap-3">
-               <button 
-                 onClick={() => window.print()}
-                 disabled={!build.cpu}
-                 className="bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-semibold py-2.5 rounded-xl transition-all flex items-center justify-center gap-2"
-               >
-                 <ShoppingCart className="w-4 h-4" />
-                 Print List
-               </button>
-               
-               <button 
-                  onClick={() => {
-                    setBuild({cpu: null, motherboard: null, ram: null, gpu: null, storage: null, psu: null, case: null});
-                    setStep(0);
-                  }}
-                  className="bg-slate-700/50 hover:bg-slate-700 text-slate-400 hover:text-white font-medium py-2.5 rounded-xl transition-all flex items-center justify-center gap-2"
-               >
-                 <RotateCcw className="w-4 h-4" />
-                 Reset
-               </button>
-             </div>
+             <button
+                onClick={() => {
+                  setBuild({cpu: null, motherboard: null, ram: null, gpu: null, storage: null, psu: null, case: null});
+                  setStep(0);
+                }}
+                className="w-full bg-slate-700/50 hover:bg-slate-700 text-slate-400 hover:text-white font-medium py-2.5 rounded-xl transition-all flex items-center justify-center gap-2"
+             >
+               <RotateCcw className="w-4 h-4" />
+               Reset Build
+             </button>
           </div>
 
         </div>
