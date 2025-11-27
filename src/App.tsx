@@ -119,7 +119,7 @@ const App = () => {
   const [aiInput, setAiInput] = useState('');
   const [aiResponse, setAiResponse] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
-  const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
+  // API key is now handled securely by the backend
 
   // --- COMPATIBILITY LOGIC ---
   useEffect(() => {
@@ -192,32 +192,36 @@ const App = () => {
   const callGemini = async (prompt: string, isJson = false): Promise<any> => {
     setAiLoading(true);
     setAiResponse(null);
+
     try {
-      const payload = {
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: isJson ? { responseMimeType: "application/json" } : {}
-      };
-      
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }
-      );
-      
-      const data = await response.json();
-      const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      
-      if (isJson) {
-         return JSON.parse(text);
+      const response = await fetch('/api/gemini', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, isJson })
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      return text;
+
+      const data = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.error || 'API Error');
+      }
+
+      if (isJson && data.response) {
+        return JSON.parse(data.response);
+      }
+
+      return data.response;
 
     } catch (error) {
       console.error("Gemini Error:", error);
-      return "Sorry, I couldn't reach the AI service right now.";
+      if (error instanceof Error) {
+        return `AI Error: ${error.message}. Please try again later.`;
+      }
+      return "Sorry, I couldn't reach the AI service right now. Please try again later.";
     } finally {
       setAiLoading(false);
     }
