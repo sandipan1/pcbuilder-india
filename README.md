@@ -16,6 +16,7 @@ A React-based PC building tool with realistic Indian pricing and AI assistance p
 
 - Node.js 18+
 - npm or yarn
+- Google Gemini API key (for AI features)
 
 ### Installation
 
@@ -30,12 +31,18 @@ cd pcbuilderindia
 npm install
 ```
 
-3. Start the development server
+3. Set up environment variables
+```bash
+cp .env.example .env
+# Edit .env and add your VITE_GEMINI_API_KEY
+```
+
+4. Start the development server
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+5. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Build for Production
 
